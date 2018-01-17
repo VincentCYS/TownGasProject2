@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/NoActionBar"
+    tools:context="com.cityu.ast.towngasproject.HomeActivity">
+
+
+    <EditText
+        android:id="@+id/EditTxtLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnStart"
+        android:layout_centerVertical="true"
+        android:layout_margin="20dp"
+        android:ems="10"
+        android:hint="請輸入地點補充"
+        android:inputType="text"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="52dp"
+        tools:layout_editor_absoluteY="280dp" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/btnEnd"
+        android:layout_alignStart="@+id/btnEnd"
+        android:layout_marginBottom="19dp"
+        android:background="@drawable/buttonshape"
+        android:text="開工"
+        android:textColor="#121212"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="57dp"
+        tools:layout_editor_absoluteY="336dp" />
+
+    <Button
+        android:id="@+id/btnEnd"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="52dp"
+        android:background="@drawable/buttonshape"
+        android:text="收工"
+        android:textStyle="bold"
+        android:textColor="#121212"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="57dp"
+        tools:layout_editor_absoluteY="336dp" />
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/EditTxtLocation"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="21dp"
+        app:srcCompat="@drawable/towngas_logo"
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="137dp" />
+</RelativeLayout>
+
