@@ -1,5 +1,6 @@
 package com.cityu.ast.towngasproject;
 
+import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,12 +8,14 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,11 +23,17 @@ public class AddStaffActivity extends AppCompatActivity {
 
     static final int REQUEST_TAKE_PHOTO = 1;
     Bitmap imageBitmap;
+    View actionBarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff);
+
+        try {
+            createActionBar();
+        } catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();}
 
         // Open Android system camera app
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -48,9 +57,21 @@ public class AddStaffActivity extends AppCompatActivity {
         }
     }
 
+    public void createActionBar(){
+        ActionBar mActionBar = getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+
+        //Initializes the custom action bar layout
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        View mCustomView = mInflater.inflate(R.layout.add_staff_custom_action_bar, null);
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+    }
+
     class CustomAdapter extends BaseAdapter {
-        private boolean[] check;
-        private String[] listItem ={
+
+        private String[] listItem = {
                 "16170 陳大文",
                 "16171 陳二文",
                 "16172 陳三文",
@@ -58,8 +79,9 @@ public class AddStaffActivity extends AppCompatActivity {
                 "16174 陳四文",
                 "16175 陳叛文"
         };
+        private boolean[] check = new boolean[listItem.length];
         private ArrayList<Integer> selectedItem = new ArrayList<>();
-
+        String item = "";
 
         @Override
         public int getCount() {
@@ -78,6 +100,7 @@ public class AddStaffActivity extends AppCompatActivity {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
+
             view = getLayoutInflater().inflate(R.layout.photo_list_item, null);
             ImageView imageView = (ImageView) view.findViewById(R.id.photo);
             final Button btnStafInfo = (Button) view.findViewById(R.id.btnStaffInfo);
@@ -106,12 +129,12 @@ public class AddStaffActivity extends AppCompatActivity {
                     builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            String item = "";
-                            for(int i = 0; i< selectedItem.size(); i++){
-                                item = item + listItem[selectedItem.get(i)];
+                            item = listItem[selectedItem.get(0)] + "\n";
+                            for(int i = 1; i< selectedItem.size(); i++){
                                 if(i != selectedItem.size()-1){
                                     item = item + "\n";
                                 }
+                                item += listItem[selectedItem.get(i)];
                             }
                             btnStafInfo.setText(item);
                             btnStafInfo.setTextSize(15.0f);
@@ -121,7 +144,13 @@ public class AddStaffActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
-
+                            if (item == "") {
+                                btnStafInfo.setText("輸入員工資料");
+                                btnStafInfo.setTextSize(24.0f);
+                            } else {
+                               // btnStafInfo.setText(item);
+                              //  btnStafInfo.setTextSize(15.0f);
+                            }
                         }
                     });
                     builder.setNeutralButton(R.string.clear_all, new DialogInterface.OnClickListener(){
@@ -131,7 +160,8 @@ public class AddStaffActivity extends AppCompatActivity {
                                 check[i] = false;
                             }
                             selectedItem.clear();
-                            btnStafInfo.setText("");
+                            btnStafInfo.setText("輸入員工資料");
+                            btnStafInfo.setTextSize(24.0f);
                         }
                     });
                     AlertDialog mDialog = builder.create();
