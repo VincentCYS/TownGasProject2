@@ -10,13 +10,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="Button" />
+            android:text="@string/btnDeleteAll"
+            android:textSize="@dimen/normalFontSize"
+            android:background="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/btnStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="Button" />
+        android:textSize="@dimen/normalFontSize"
+        android:text="@string/btnStart"
+        android:background="@color/colorPrimary"/>
 
 </RelativeLayout>

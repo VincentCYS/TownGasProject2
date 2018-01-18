@@ -13,10 +13,8 @@
         android:id="@+id/towngaslogo"
         android:layout_width="wrap_content"
         android:layout_height="257dp"
-        android:layout_marginBottom="@dimen/margin"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"
-        android:layout_marginTop="80dp"
+        android:layout_margin="@dimen/margin"
+        android:layout_gravity="top"
         app:srcCompat="@drawable/towngas_logo"
         tools:layout_editor_absoluteX="138dp"
         tools:layout_editor_absoluteY="137dp" />
@@ -36,15 +34,15 @@
         tools:layout_editor_absoluteY="280dp" />
 
     <Button
-        android:id="@+id/btnStart"
+        android:id="@+id/btnStartHome"
         android:layout_width="150dp"
         android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="19dp"
         android:background="@drawable/buttonshape"
         android:text="@string/btnStart"
         android:textColor="@color/colorText"
         android:textSize="@dimen/normalFontSize"
-        android:layout_gravity="center_horizontal"
         android:textStyle="bold" />
 
     <Button

@@ -14,7 +14,7 @@ import java.io.File;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Button btnStart, btnEnd;
+    Button btnStartHome, btnEnd;
     static final int CAM_REQUEST = 1;
 
     @Override
@@ -25,13 +25,13 @@ public class HomeActivity extends AppCompatActivity {
         // Hide action bar
         getSupportActionBar().hide();
 
-        btnStart = (Button) findViewById(R.id.btnStart);
+        btnStartHome = (Button) findViewById(R.id.btnStartHome);
         btnEnd = (Button) findViewById(R.id.btnEnd);
 
-        btnStart.setOnClickListener(new View.OnClickListener(){
+        btnStartHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, AddStaffActivity.class);
+                Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
                 startActivity(intent);
             }
 

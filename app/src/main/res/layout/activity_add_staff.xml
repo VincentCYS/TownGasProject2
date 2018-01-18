@@ -11,6 +11,13 @@
     <ListView
         android:id="@+id/addStaffListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"></ListView>
+
+    <ImageButton
+        android:id="@+id/imageBtnTakePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
 </LinearLayout>

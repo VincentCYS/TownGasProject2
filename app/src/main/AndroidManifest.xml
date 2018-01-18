@@ -26,6 +26,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".AddStaffActivity" />
         <activity android:name=".PhotoSingleItemActivity" />
+        <activity android:name=".CameraActivity"></activity>
     </application>
 
 </manifest>

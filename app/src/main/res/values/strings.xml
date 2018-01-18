@@ -11,4 +11,5 @@
     <string name="clear_all">重設</string>
     <string name="workerList">工人名單</string>
     <string name="search">搜尋</string>
+    <string name="btnDeleteAll">全部刪除</string>
 </resources>
