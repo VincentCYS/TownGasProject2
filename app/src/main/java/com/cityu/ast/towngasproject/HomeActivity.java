@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -57,10 +58,10 @@ public class HomeActivity extends AppCompatActivity {
 
         dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        dialogView = inflater.inflate(R.layout.custom_dialog_gps, null);
+
+        dialogView = inflater.inflate(R.layout.custom_dialog_gps, null, false);
 
         getSupportActionBar().hide();
-
 
         btnStartHome = (Button) findViewById(R.id.btnStartHome);
         btnEnd = (Button) findViewById(R.id.btnEnd);
@@ -130,8 +131,7 @@ public class HomeActivity extends AppCompatActivity {
         btnStartHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
-                startActivity(intent);
+                showChangeLangDialog();
             }
 
         });
@@ -153,13 +153,12 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 b.dismiss();
+                Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
+                startActivity(intent);
             }
         });
 
         configure_button();
-
-        showChangeLangDialog();
-
     }
 
 
@@ -192,9 +191,12 @@ public class HomeActivity extends AppCompatActivity {
         }
 
     public void showChangeLangDialog() {
-        dialogBuilder.setView(dialogView);
 
-        b = dialogBuilder.create();
+        if (b == null) {
+            dialogBuilder.setView(dialogView);
+            b = dialogBuilder.create();
+        }
+
         b.show();
     }
 
