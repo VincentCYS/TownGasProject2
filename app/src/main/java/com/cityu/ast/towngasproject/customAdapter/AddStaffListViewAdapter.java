@@ -1,4 +1,4 @@
-package com.cityu.ast.towngasproject;
+package com.cityu.ast.towngasproject.customAdapter;
 
 /**
  * Created by vince on 17/1/2018.
@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import com.cityu.ast.towngasproject.R;
 
 import java.util.ArrayList;
 

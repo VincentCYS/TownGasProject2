@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 public class CameraActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
-    static Bitmap imageBitmap;
+    static public Bitmap imageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
