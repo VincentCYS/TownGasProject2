@@ -22,13 +22,16 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // Hide action bar
+        getSupportActionBar().hide();
+
         btnStart = (Button) findViewById(R.id.btnStart);
         btnEnd = (Button) findViewById(R.id.btnEnd);
 
         btnStart.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this,AddStaffActivity.class);
+                Intent intent = new Intent(HomeActivity.this, AddStaffActivity.class);
                 startActivity(intent);
             }
 
