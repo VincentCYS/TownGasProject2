@@ -53,11 +53,11 @@ public class AddStaffActivity extends AppCompatActivity {
         btnDeleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(actionBarView.getContext());
-                builder.setMessage("全部刪除?");
-                builder.setCancelable(true);
+                android.app.AlertDialog.Builder builder2 = new android.app.AlertDialog.Builder(actionBarView.getContext());
+                builder2.setMessage("全部刪除?");
+                builder2.setCancelable(true);
 
-                builder.setPositiveButton(
+                builder2.setPositiveButton(
                         "確定",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -68,7 +68,7 @@ public class AddStaffActivity extends AppCompatActivity {
                             }
                         });
 
-                builder.setNegativeButton(
+                builder2.setNegativeButton(
                         "取消",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -76,10 +76,33 @@ public class AddStaffActivity extends AppCompatActivity {
                             }
                         });
 
-                android.app.AlertDialog alert = builder.create();
+                android.app.AlertDialog alert = builder2.create();
                 alert.show();
 
 
+
+            }
+        });
+
+        Button btnStart = (Button) actionBarView.findViewById(R.id.btnStart);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(actionBarView.getContext());
+                builder.setMessage("打卡成功!");
+                builder.setCancelable(true);
+
+                builder.setPositiveButton(
+                        "確定",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                android.app.AlertDialog alert = builder.create();
+                alert.show();
 
             }
         });

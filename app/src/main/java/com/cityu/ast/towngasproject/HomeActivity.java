@@ -1,11 +1,13 @@
 package com.cityu.ast.towngasproject;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -50,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
     AlertDialog.Builder dialogBuilder;
     TextView tvDate, tvTime, tvLocation, tvGpsSignal;
     Button btnRefresh, btnOk;
+    Criteria criteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,8 @@ public class HomeActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 
         listener = new LocationListener() {
             @Override
@@ -90,6 +95,8 @@ public class HomeActivity extends AppCompatActivity {
                         tvGpsSignal.setText("好");
                     }
                 });
+
+                configure_button();
 
                 if (latitude != null || longitude != null) {
                     geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -122,9 +129,6 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onProviderDisabled(String s) {
-
-                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(i);
             }
         };
 
@@ -132,6 +136,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showChangeLangDialog();
+                configure_button();
             }
 
         });
@@ -139,12 +144,7 @@ public class HomeActivity extends AppCompatActivity {
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //noinspection MissingPermission
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                locationManager.requestLocationUpdates("gps", 1000*20, 0, listener);
+                configure_button();
             }
 
         });
@@ -152,13 +152,16 @@ public class HomeActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                b.dismiss();
-                Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
-                startActivity(intent);
+                if (tvLocation.getText() == "") {
+                    Toast.makeText(dialogView.getContext(), "等待信號...", Toast.LENGTH_LONG).show();
+                } else {
+                    b.dismiss();
+                    Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
-        configure_button();
     }
 
 
@@ -176,16 +179,30 @@ public class HomeActivity extends AppCompatActivity {
 
     void configure_button() {
         // first check for permissions
+
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
                         , 10);
             }
         }
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+        boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean statusOfNetwork = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (!statusOfGPS && !statusOfNetwork ) {
+            Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(i);
         }
-        locationManager.requestLocationUpdates("gps", 1000*20, 0, listener);
+
+        if (statusOfGPS) {
+            locationManager.requestLocationUpdates("gps", 1000*2, 0, listener);
+        } else if (statusOfNetwork) {
+            locationManager.requestSingleUpdate(criteria, listener, null);
+        }
+
 
             return;
         }
@@ -197,7 +214,24 @@ public class HomeActivity extends AppCompatActivity {
             b = dialogBuilder.create();
         }
 
+        b.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                tvLocation.setText("");
+                tvTime.setText("");
+                tvDate.setText("");
+                tvGpsSignal.setText("");
+               // longitude = null;
+               // listener = null;
+               // addresses = null;
+            }
+        });
+
         b.show();
     }
+
+
+
 
 }

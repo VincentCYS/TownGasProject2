@@ -12,6 +12,7 @@
             android:layout_alignParentLeft="true"
             android:text="@string/btnDeleteAll"
             android:textSize="@dimen/normalFontSize"
+            android:textColor="#FFFFFF"
             android:background="@color/colorPrimary"/>
 
     <Button
@@ -21,6 +22,7 @@
         android:layout_alignParentRight="true"
         android:textSize="@dimen/normalFontSize"
         android:text="@string/btnStart"
+        android:textColor="#FFFFFF"
         android:background="@color/colorPrimary"/>
 
 </RelativeLayout>
