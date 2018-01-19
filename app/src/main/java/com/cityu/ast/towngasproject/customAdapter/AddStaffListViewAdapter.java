@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import static com.cityu.ast.towngasproject.CameraActivity.imageBitmap;
 
 public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter {
-    private ArrayList<String> list = new ArrayList<String>();
+    public static ArrayList<Bitmap> list = new ArrayList<Bitmap>();
     private Context context;
     private String[] listItem = {
             "16170 陳大文",
@@ -38,12 +38,13 @@ public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter 
             "16175 陳叛文"
     };
     private boolean[] check = new boolean[listItem.length];
+    private boolean[] copy_check = new boolean[listItem.length];
+
     private ArrayList<Integer> selectedItem = new ArrayList<>();
     String item = "";
 
 
-    public AddStaffListViewAdapter(ArrayList<String> list, Context context) {
-        this.list = list;
+    public AddStaffListViewAdapter(Context context) {
         this.context = context;
     }
 
@@ -74,7 +75,9 @@ public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter 
         final Button btnStaffInfo = (Button) view.findViewById(R.id.btnStaffInfo);
         final Button btnDelete = (Button) view.findViewById(R.id.btnDelete);
 
-        imageView.setImageBitmap(imageBitmap);
+        // Display the image that taken by the camera
+        imageView.setImageBitmap(list.get(position));
+
 
         btnStaffInfo.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -98,13 +101,15 @@ public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter 
                 builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        item = listItem[selectedItem.get(0)] + "\n";
+                        item = listItem[selectedItem.get(0)];
                         for(int i = 1; i< selectedItem.size(); i++){
-                            if(i != selectedItem.size()-1){
-                                item = item + "\n";
-                            }
-                            item += listItem[selectedItem.get(i)];
+
+                            item += "\n" + listItem[selectedItem.get(i)];
                         }
+
+                        for(int i = 0 ; i < check.length; i++)
+                            copy_check[i] = check[i];
+
                         btnStaffInfo.setText(item);
                         btnStaffInfo.setTextSize(15.0f);
                     }
@@ -120,6 +125,9 @@ public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter 
                             // btnStafInfo.setText(item);
                             //  btnStafInfo.setTextSize(15.0f);
                         }
+
+                        for(int i = 0 ; i < check.length; i++)
+                            check[i] = copy_check[i];
                     }
                 });
                 builder.setNeutralButton(R.string.clear_all, new DialogInterface.OnClickListener(){
@@ -131,6 +139,11 @@ public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter 
                         selectedItem.clear();
                         btnStaffInfo.setText("輸入員工資料");
                         btnStaffInfo.setTextSize(24.0f);
+
+                        for(int i = 0 ; i < check.length; i++){
+                            check[i] = false;
+                            copy_check[i] = check[i];
+                        }
                     }
                 });
                 AlertDialog mDialog = builder.create();
@@ -138,6 +151,8 @@ public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter 
             }
         });
 
+
+        // Delete a single row of record
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,8 +164,9 @@ public class AddStaffListViewAdapter extends BaseAdapter implements ListAdapter 
                         "確定",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                // Remove the record from the list
                                 list.remove(position);
-                                notifyDataSetChanged();
+                                notifyDataSetChanged();     // Refresh the listview
                                 dialog.cancel();
                             }
                         });

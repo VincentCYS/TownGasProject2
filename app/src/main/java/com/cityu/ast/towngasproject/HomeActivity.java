@@ -86,15 +86,9 @@ public class HomeActivity extends AppCompatActivity {
                 longitude = location.getLongitude();
                 latitude = location.getLatitude();
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        tvTime.setText(DateFormat.getTimeInstance().format(location.getTime()));
-                        tvDate.setText(DateFormat.getDateInstance().format(location.getTime()));
-                        tvGpsSignal.setText("好");
-                    }
-                });
+                tvTime.setText(DateFormat.getTimeInstance().format(location.getTime()));
+                tvDate.setText(DateFormat.getDateInstance().format(location.getTime()));
+                tvGpsSignal.setText("好");
 
                 configure_button();
 
@@ -179,30 +173,35 @@ public class HomeActivity extends AppCompatActivity {
 
     void configure_button() {
         // first check for permissions
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
+                                , 10);
+                    }
+                }
 
+                LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+                boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                boolean statusOfNetwork = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
-                        , 10);
+                if (!statusOfGPS && !statusOfNetwork ) {
+                    Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(i);
+                }
+
+                if (statusOfGPS) {
+                    locationManager.requestLocationUpdates("gps", 1000*2, 0, listener);
+                } else if (statusOfNetwork) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                        locationManager.requestSingleUpdate(criteria, listener, null);
+                    }
+                }
+
             }
-        }
-
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
-        boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean statusOfNetwork = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        if (!statusOfGPS && !statusOfNetwork ) {
-            Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(i);
-        }
-
-        if (statusOfGPS) {
-            locationManager.requestLocationUpdates("gps", 1000*2, 0, listener);
-        } else if (statusOfNetwork) {
-            locationManager.requestSingleUpdate(criteria, listener, null);
-        }
-
+        });
 
             return;
         }
@@ -214,6 +213,7 @@ public class HomeActivity extends AppCompatActivity {
             b = dialogBuilder.create();
         }
 
+        // Clear all the text on the dialog
         b.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
             @Override
@@ -222,9 +222,6 @@ public class HomeActivity extends AppCompatActivity {
                 tvTime.setText("");
                 tvDate.setText("");
                 tvGpsSignal.setText("");
-               // longitude = null;
-               // listener = null;
-               // addresses = null;
             }
         });
 

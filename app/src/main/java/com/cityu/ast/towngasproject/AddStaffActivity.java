@@ -3,6 +3,8 @@ package com.cityu.ast.towngasproject;
 import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,9 +16,12 @@ import com.cityu.ast.towngasproject.customAdapter.AddStaffListViewAdapter;
 
 import java.util.ArrayList;
 
+import static com.cityu.ast.towngasproject.CameraActivity.imageBitmap;
+import static com.cityu.ast.towngasproject.customAdapter.AddStaffListViewAdapter.list;
+
+
 public class AddStaffActivity extends AppCompatActivity {
     View actionBarView;
-    ArrayList<String> list;
     AddStaffListViewAdapter adapter = null;
 
     @Override
@@ -29,12 +34,10 @@ public class AddStaffActivity extends AppCompatActivity {
         createActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        list = new ArrayList<String>();
-
-        list.add("item1");
+        list.add(imageBitmap);
 
         //instantiate custom adapter
-        adapter = new AddStaffListViewAdapter(list, this);
+        adapter = new AddStaffListViewAdapter(this);
 
         //handle listview and assign adapter
         listView.setAdapter(adapter);
@@ -53,11 +56,10 @@ public class AddStaffActivity extends AppCompatActivity {
         btnDeleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.app.AlertDialog.Builder builder2 = new android.app.AlertDialog.Builder(actionBarView.getContext());
-                builder2.setMessage("全部刪除?");
-                builder2.setCancelable(true);
-
-                builder2.setPositiveButton(
+                new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
+                        .setTitle("全部刪除?")
+                        .setCancelable(true)
+                        .setPositiveButton(
                         "確定",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -66,18 +68,13 @@ public class AddStaffActivity extends AppCompatActivity {
                                 finish();
                                 dialog.cancel();
                             }
-                        });
-
-                builder2.setNegativeButton(
+                        }).setNegativeButton(
                         "取消",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
-                        });
-
-                android.app.AlertDialog alert = builder2.create();
-                alert.show();
+                        }).create().show();
 
 
 
@@ -88,22 +85,22 @@ public class AddStaffActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(actionBarView.getContext());
-                builder.setMessage("打卡成功!");
-                builder.setCancelable(true);
-
-                builder.setPositiveButton(
+                new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
+                .setTitle("打卡成功!")
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        finish();
+                    }
+                })
+                .setCancelable(true).setPositiveButton(
                         "確定",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
                                 finish();
                             }
-                        });
-
-                android.app.AlertDialog alert = builder.create();
-                alert.show();
-
+                        }).create().show();
             }
         });
     }
