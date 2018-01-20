@@ -19,4 +19,5 @@
     <string name="time">時間:</string>
     <string name="regInfo">打卡資訊</string>
     <string name="gpsSignal">信號強度:</string>
+    <string name="register">打卡</string>
 </resources>

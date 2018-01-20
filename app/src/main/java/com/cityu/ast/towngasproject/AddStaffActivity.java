@@ -29,10 +29,9 @@ public class AddStaffActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff);
         ListView listView = (ListView) findViewById(R.id.addStaffListView);
-        ImageButton imageBtnTakePhoto = (ImageButton) findViewById(R.id.imageBtnTakePhoto);
 
+        // Show the actionbar
         createActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         list.add(imageBitmap);
 
@@ -43,7 +42,9 @@ public class AddStaffActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
 
-        imageBtnTakePhoto.setOnClickListener(new View.OnClickListener() {
+        // Start the android camera app
+        Button btnTakePhoto = (Button) findViewById(R.id.btnTakePhoto);
+        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -59,6 +60,8 @@ public class AddStaffActivity extends AppCompatActivity {
                 new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
                         .setTitle("全部刪除?")
                         .setCancelable(true)
+
+                        // Positive button event
                         .setPositiveButton(
                         "確定",
                         new DialogInterface.OnClickListener() {
@@ -68,6 +71,8 @@ public class AddStaffActivity extends AppCompatActivity {
                                 finish();
                                 dialog.cancel();
                             }
+
+                            // Negative button event
                         }).setNegativeButton(
                         "取消",
                         new DialogInterface.OnClickListener() {
@@ -81,7 +86,7 @@ public class AddStaffActivity extends AppCompatActivity {
             }
         });
 
-        Button btnStart = (Button) actionBarView.findViewById(R.id.btnStart);
+        Button btnStart = (Button) findViewById(R.id.btnStart);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,26 +95,36 @@ public class AddStaffActivity extends AppCompatActivity {
                         .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        finish();
+                        btnStartEvent();
                     }
                 })
-                .setCancelable(true).setPositiveButton(
+                .setCancelable(true)
+
+                        // Positive button event
+                        .setPositiveButton(
                         "確定",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                btnStartEvent();
                                 dialog.dismiss();
-                                finish();
                             }
                         }).create().show();
             }
         });
     }
 
+    public void btnStartEvent () {
+        list.removeAll(list);
+        adapter.notifyDataSetChanged();
+        finish();
+    }
+
 
     public void createActionBar(){
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.add_staff_custom_action_bar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Disable the back button on the actionbar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         actionBarView = getSupportActionBar().getCustomView();
     }
 }

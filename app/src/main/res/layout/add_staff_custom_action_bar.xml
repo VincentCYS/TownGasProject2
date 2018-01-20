@@ -5,39 +5,44 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:background="@color/colorPrimary"
-        android:layout_alignBottom="@id/btnDeleteAll"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"/>
-
     <Button
         android:id="@+id/btnDeleteAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/imageButton"
-        android:layout_toRightOf="@+id/imageButton"
         android:background="@color/colorPrimary"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"
         android:text="@string/btnDeleteAll"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/normalFontSize" />
 
-    <Button
-        android:id="@+id/btnStart"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="67dp"
+        android:layout_marginStart="67dp"
+        android:layout_margin="@dimen/margin"
         android:textSize="@dimen/normalFontSize"
-        android:text="@string/btnStart"
-        android:textColor="#FFFFFF"
-        android:background="@color/colorPrimary"/>
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_toRightOf="@+id/imageView"
+        android:text="@string/btnStart" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_toEndOf="@+id/imageTakePhoto"
+        android:layout_toRightOf="@+id/imageTakePhoto"
+        android:layout_alignBottom="@id/imageTakePhoto"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        app:srcCompat="@drawable/towngas_icon" />
 
 </RelativeLayout>
