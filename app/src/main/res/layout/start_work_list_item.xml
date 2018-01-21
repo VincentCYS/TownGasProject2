@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/buttonshape"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/startPhoto"
+        android:layout_width="291dp"
+        android:layout_height="209dp"
+        android:layout_margin="@dimen/margin"
+        android:layout_weight="1"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_gravity="center_vertical"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editTxtStartComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="20dp"
+            android:hint="@string/editTxtComment"
+            android:inputType="text"
+            android:padding="5dp"
+            android:paddingLeft="@dimen/margin"
+            android:textSize="@dimen/normalFontSize"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnStartStaffInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshape"
+            android:paddingBottom="@dimen/margin"
+            android:paddingEnd="30dp"
+            android:paddingStart="30dp"
+            android:paddingTop="@dimen/margin"
+            android:text="@string/btnStaffInfo"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/normalFontSize"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnStartDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="@dimen/margin"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshape"
+            android:text="@string/btnDelete"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/normalFontSize"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    </LinearLayout>

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ListView;
 
 public class CameraActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -28,7 +27,7 @@ public class CameraActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
             finish();
-            startActivity(new Intent(this, AddStaffActivity.class));
+            startActivity(new Intent(this, StartWorkActivity.class));
         } else {
             finish();
         }

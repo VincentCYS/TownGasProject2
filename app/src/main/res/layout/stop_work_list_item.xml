@@ -9,7 +9,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
-        android:id="@+id/photo"
+        android:id="@+id/stopPhoto"
         android:layout_width="291dp"
         android:layout_height="209dp"
         android:layout_margin="@dimen/margin"
@@ -24,7 +24,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/editTxtComment"
+            android:id="@+id/editTxtStopComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -38,7 +38,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnStaffInfo"
+            android:id="@+id/btnStopStaffInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -59,7 +59,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnDelete"
+            android:id="@+id/btnStopDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -76,4 +76,4 @@
 
     </LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>

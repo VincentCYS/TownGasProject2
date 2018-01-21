@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/NoActionBar"
-    tools:context="com.cityu.ast.towngasproject.AddStaffActivity">
+    tools:context="com.cityu.ast.towngasproject.StartWorkActivity">
 
     <ListView
-        android:id="@+id/addStaffListView"
+        android:id="@+id/startWorkListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -27,7 +27,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnTakePhoto"
+            android:id="@+id/btnStartTakePhoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin"

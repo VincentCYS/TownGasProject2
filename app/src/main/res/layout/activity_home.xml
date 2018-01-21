@@ -52,7 +52,7 @@
         android:layout_marginBottom="52dp"
         android:background="@drawable/buttonshape"
         android:layout_gravity="center_horizontal"
-        android:text="@string/btnEnd"
+        android:text="@string/btnStop"
         android:textColor="@color/colorText"
         android:textSize="@dimen/normalFontSize"
         android:textStyle="bold" />

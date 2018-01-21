@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:theme="@style/NoActionBar"
+    tools:context="com.cityu.ast.towngasproject.StartWorkActivity">
+
+    <ListView
+        android:id="@+id/stopWorkListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/linearLayout">
+
+    </ListView>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnStopTakePhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshapedarkblue"
+            android:padding="@dimen/margin"
+            android:text="加相"
+            android:textColor="@color/white"
+            android:textSize="@dimen/normalFontSize"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:layout_weight="1"
+            android:background="@drawable/buttonshapeblue"
+            android:padding="@dimen/margin"
+            android:text="@string/btnStart"
+            android:textColor="@color/white"
+            android:textSize="@dimen/normalFontSize"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>
