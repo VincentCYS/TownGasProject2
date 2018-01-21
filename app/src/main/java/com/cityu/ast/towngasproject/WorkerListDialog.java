@@ -1,24 +1,14 @@
 package com.cityu.ast.towngasproject;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +25,8 @@ import java.util.ArrayList;
 public class WorkerListDialog extends Dialog{
     private ListView lv;
     private EditText et = null;
-    private Button clearAll, confirm, cancel, btnStaffInfo;
+    private TextView list;
+    private Button clearAll, confirm, cancel;
     private ArrayList<Integer> selectedItem = new ArrayList<>();
     private ArrayAdapter<String> adapter = null;
     private final static String[] listItem ={
@@ -61,7 +52,7 @@ public class WorkerListDialog extends Dialog{
         /** Design the dialog in main.xml file */
         //final Dialog dialog = new Dialog(context);
         setContentView(R.layout.dialog_worker_select);
-        btnStaffInfo = (Button) view.findViewById(R.id.btnStartStaffInfo);
+        list = (TextView) view.findViewById(R.id.list);
         clearAll = (Button) findViewById(R.id.clear_all);
         confirm = (Button) findViewById(R.id.confirm);
         cancel = (Button) findViewById(R.id.cancel);
@@ -69,7 +60,7 @@ public class WorkerListDialog extends Dialog{
         et.addTextChangedListener(filterTextWatcher);
         lv = (ListView) findViewById(R.id.lv1);
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        adapter = new ArrayAdapter<String>(context, R.layout.row, R.id.workerItem, listItem);
+        adapter = new ArrayAdapter<String>(context, R.layout.add_staff_dialog_list_view, R.id.workerItem, listItem);
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,7 +81,7 @@ public class WorkerListDialog extends Dialog{
 
         clearAll.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                for(int i = 0; i< lv.getChildCount(); i++){
+                for(int i = 0; i< lv.getCount(); i++){
                     lv.setItemChecked(i, false);
                 }
                 selectedItem.clear();
@@ -156,6 +147,6 @@ public class WorkerListDialog extends Dialog{
                 item = item + "\n";
             }
         }
-        btnStaffInfo.setText(item);
+        list.setText("名單: \n" + item);
     }
 }

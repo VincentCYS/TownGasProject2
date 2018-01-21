@@ -54,12 +54,34 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
             view = inflater.inflate(R.layout.start_work_list_item, null);
         }
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.startPhoto);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.startPhoto);
         final Button btnStaffInfo = (Button) view.findViewById(R.id.btnStartStaffInfo);
         final Button btnDelete = (Button) view.findViewById(R.id.btnStartDelete);
+        final ImageView bigPic = (ImageView) parent.getRootView().findViewById(R.id.expanded_image);
 
         // Display the image that taken by the camera
         imageView.setImageBitmap(list.get(position));
+
+
+        imageView.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        bigPic.setImageBitmap(list.get(position));
+                        bigPic.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                }
+        );
+
+        imageView.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bigPic.setVisibility(View.GONE);
+                    }
+                }
+        );
 
         final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), view);
         btnStaffInfo.setOnClickListener(new View.OnClickListener(){
@@ -70,7 +92,7 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
         });
 
 
-        // Delete a single row of record
+        // Delete a single add_staff_dialog_list_view of record
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
