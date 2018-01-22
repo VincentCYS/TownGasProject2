@@ -6,6 +6,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import static com.cityu.ast.towngasproject.StartWorkActivity.adapter;
+import static com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapter.list;
+
 public class CameraActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
     public static Bitmap imageBitmap = null;
@@ -24,12 +27,18 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
+            final Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
-            finish();
-            startActivity(new Intent(this, StartWorkActivity.class));
-        } else {
-            finish();
+            list.add(imageBitmap);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
         }
+
+        finish();
     }
 }

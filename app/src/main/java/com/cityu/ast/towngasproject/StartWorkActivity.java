@@ -3,6 +3,7 @@ package com.cityu.ast.towngasproject;
 import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,13 +21,14 @@ import static com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapte
 
 public class StartWorkActivity extends AppCompatActivity {
     View actionBarView;
-    StartWorkListViewAdapter adapter = null;
+    public static StartWorkListViewAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_work);
         ListView listView = (ListView) findViewById(R.id.startWorkListView);
+
 
         // Show the actionbar
         createActionBar();
@@ -44,10 +46,14 @@ public class StartWorkActivity extends AppCompatActivity {
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
                 startActivity(new Intent(getApplicationContext(), CameraActivity.class));
             }
         });
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            btnTakePhoto.callOnClick();
+        }
 
 
         Button btnDeleteAll = (Button) actionBarView.findViewById(R.id.btnDeleteAll);

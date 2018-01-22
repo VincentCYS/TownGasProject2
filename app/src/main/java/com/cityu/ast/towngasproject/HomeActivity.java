@@ -150,7 +150,7 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(dialogView.getContext(), "等待信號...", Toast.LENGTH_LONG).show();
                 } else {
                     b.dismiss();
-                    Intent intent = new Intent(HomeActivity.this, CameraActivity.class);
+                    Intent intent = new Intent(HomeActivity.this, StartWorkActivity.class);
                     startActivity(intent);
                 }
             }
