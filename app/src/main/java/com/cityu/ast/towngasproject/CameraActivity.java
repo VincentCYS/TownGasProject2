@@ -1,5 +1,6 @@
 package com.cityu.ast.towngasproject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
@@ -26,10 +27,17 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ProgressDialog pDialog = new ProgressDialog(CameraActivity.this);
+
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             final Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
             list.add(imageBitmap);
+
+            pDialog.setMessage("載入中...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -38,7 +46,12 @@ public class CameraActivity extends AppCompatActivity {
                 }
             });
         }
+        pDialog.dismiss();
+
 
         finish();
     }
-}
+
+
+
+    }

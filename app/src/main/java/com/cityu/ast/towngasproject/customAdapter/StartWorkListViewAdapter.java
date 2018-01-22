@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 
-import com.cityu.ast.towngasproject.MainActivity;
 import com.cityu.ast.towngasproject.R;
 import com.cityu.ast.towngasproject.WorkerListDialog;
 

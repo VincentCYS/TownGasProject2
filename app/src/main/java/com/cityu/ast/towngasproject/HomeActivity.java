@@ -1,6 +1,7 @@
 package com.cityu.ast.towngasproject;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
     TextView tvDate, tvTime, tvLocation, tvGpsSignal;
     Button btnRefresh, btnOk;
     Criteria criteria;
+    ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +88,7 @@ public class HomeActivity extends AppCompatActivity {
                 longitude = location.getLongitude();
                 latitude = location.getLatitude();
 
-                tvTime.setText(DateFormat.getTimeInstance().format(location.getTime()));
-                tvDate.setText(DateFormat.getDateInstance().format(location.getTime()));
+
                 tvGpsSignal.setText("好");
 
                 configure_button();
@@ -104,7 +105,11 @@ public class HomeActivity extends AppCompatActivity {
 
                         String fullAddress = address + ", " + area + ", " + city;
                         tvLocation.setText(fullAddress);
-                    } catch (IOException e) {
+                        tvTime.setText(DateFormat.getTimeInstance().format(location.getTime()));
+                        tvDate.setText(DateFormat.getDateInstance().format(location.getTime()));
+                        pDialog.dismiss();
+
+                    } catch (Exception e) {
                     }
                 }
 
@@ -131,6 +136,13 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showChangeLangDialog();
                 configure_button();
+                if (tvLocation.getText() == "") {
+                    pDialog = new ProgressDialog(HomeActivity.this);
+                    pDialog.setMessage("載入中...");
+                    pDialog.setIndeterminate(false);
+                    pDialog.setCancelable(true);
+                    pDialog.show();
+                }
             }
 
         });
@@ -139,6 +151,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 configure_button();
+                pDialog = new ProgressDialog(HomeActivity.this);
+                pDialog.setMessage("載入中...");
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(true);
+              //  pDialog.show();
             }
 
         });
@@ -146,9 +163,9 @@ public class HomeActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tvLocation.getText() == "") {
-                    Toast.makeText(dialogView.getContext(), "等待信號...", Toast.LENGTH_LONG).show();
-                } else {
+
+                if (tvLocation.getText() != "") {
+                   // Toast.makeText(dialogView.getContext(), "等待信號...", Toast.LENGTH_LONG).show();
                     b.dismiss();
                     Intent intent = new Intent(HomeActivity.this, StartWorkActivity.class);
                     startActivity(intent);
@@ -193,12 +210,15 @@ public class HomeActivity extends AppCompatActivity {
                 }
 
                 if (statusOfGPS) {
-                    locationManager.requestLocationUpdates("gps", 1000*2, 0, listener);
+                    locationManager.requestLocationUpdates("gps", 1000*20, 0, listener);
+                   // locationManager.requestSingleUpdate("gps",listener, null);
+
                 } else if (statusOfNetwork) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
                         locationManager.requestSingleUpdate(criteria, listener, null);
                     }
                 }
+
 
             }
         });

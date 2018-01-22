@@ -6,12 +6,14 @@
     <solid
         android:color="#FFFFFF"
         />
-    <padding
-        android:left="0dp"
-        android:top="0dp"
-        android:right="0dp"
-        android:bottom="0dp"
+
+    <margin
+        android:left="@dimen/margin"
+        android:top="@dimen/margin"
+        android:right="@dimen/margin"
+        android:bottom="@dimen/margin"
         />
+
     <size
         android:width="270dp"
         android:height="60dp"

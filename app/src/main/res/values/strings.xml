@@ -20,4 +20,22 @@
     <string name="regInfo">打卡資訊</string>
     <string name="gpsSignal">信號強度:</string>
     <string name="register">打卡</string>
+    <string name="use_password">使用密碼認證</string>
+    <string name="sign_in">指紋認證</string>
+    <string name="sign_in2">密碼認證</string>
+    <string name="password">請輸入密碼</string>
+    <string name="fingerprint_hint">請將手指放在指紋器上</string>
+    <string name="purchase">認證</string>
+    <string name="purchase_not_invalidated">Purchase not invalidated</string>
+    <string name="purchase_button_not_invalidated_description">You can proceed to purchase with this button \n even if a new fingerprint is enrolled</string>
+    <string name="fingerprint_not_recognized">指紋認證不成功，請重試</string>
+    <string name="fingerprint_success">指紋認證成功</string>
+    <string name="password_success">密碼認證成功</string>
+    <string name="purchase_done"> </string>
+    <string name="new_fingerprint_enrolled_description">A new fingerprint was added to this device, so your password is required.</string>
+    <string name="use_fingerprint_in_future">Use fingerprint in the future</string>
+    <string name="use_fingerprint_to_authenticate_title">Use fingerprint to authenticate</string>
+    <string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
+    <string name="description_fingerprint_icon">Fingerprint icon</string>
+    <string name="description_password_icon">Password icon</string>
 </resources>
