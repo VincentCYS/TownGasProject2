@@ -15,15 +15,19 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cityu.ast.towngasproject.R;
 import com.cityu.ast.towngasproject.WorkerListDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter {
     public static ArrayList<Bitmap> list = new ArrayList<Bitmap>();
     public static ArrayList<Integer> backup = new ArrayList<>();
+    public static ArrayList<String> nameList = new ArrayList<>();
     private Context context;
 
     public StartWorkListViewAdapter(Context context) {
@@ -48,15 +52,22 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
+
+
+
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.start_work_list_item, null);
+        } else {
+
         }
 
+        final TextView listText = (TextView) view.findViewById(R.id.list);
         final ImageView imageView = (ImageView) view.findViewById(R.id.startPhoto);
         final Button btnStaffInfo = (Button) view.findViewById(R.id.btnStartStaffInfo);
         final Button btnDelete = (Button) view.findViewById(R.id.btnStartDelete);
         final ImageView bigPic = (ImageView) parent.getRootView().findViewById(R.id.expanded_image);
+
 
         // Display the image that taken by the camera
         imageView.setImageBitmap(list.get(position));
@@ -82,7 +93,8 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
                 }
         );
 
-        final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), view);
+        final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), listText, position);
+
         btnStaffInfo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){

@@ -18,6 +18,8 @@ import com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapter;
 
 import java.util.ArrayList;
 
+import static com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapter.nameList;
+
 /**
  * Created by tsang on 19/1/2018.
  */
@@ -47,12 +49,12 @@ public class WorkerListDialog extends Dialog{
     public static String staffList = "";
 
 
-    public WorkerListDialog(final Context context, final View view) {
+    public WorkerListDialog(final Context context,final TextView list, final int position) {
         super(context);
         /** Design the dialog in main.xml file */
         //final Dialog dialog = new Dialog(context);
         setContentView(R.layout.dialog_worker_select);
-        list = (TextView) view.findViewById(R.id.list);
+       // list = (TextView) view.findViewById(R.id.list);
         clearAll = (Button) findViewById(R.id.clear_all);
         confirm = (Button) findViewById(R.id.confirm);
         cancel = (Button) findViewById(R.id.cancel);
@@ -60,6 +62,7 @@ public class WorkerListDialog extends Dialog{
         et.addTextChangedListener(filterTextWatcher);
         lv = (ListView) findViewById(R.id.lv1);
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
         adapter = new ArrayAdapter<String>(context, R.layout.add_staff_dialog_list_view, R.id.workerItem, listItem);
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,7 +93,9 @@ public class WorkerListDialog extends Dialog{
 
         confirm.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                showItem();
+                nameList.add(getShowItem());
+                list.setText(nameList.get(position));
+
                 StartWorkListViewAdapter.backup.clear();
                 for(int i = 0;i<selectedItem.size();i++){
                     StartWorkListViewAdapter.backup.add(selectedItem.get(i));
@@ -138,7 +143,7 @@ public class WorkerListDialog extends Dialog{
         et.removeTextChangedListener(filterTextWatcher);
     }
 
-    public void showItem(){
+    public String getShowItem(){
         String item = "";
         for(int i = 0; i< selectedItem.size(); i++){
             item = item + listItem[selectedItem.get(i)];
@@ -147,6 +152,6 @@ public class WorkerListDialog extends Dialog{
                 item = item + "\n";
             }
         }
-        list.setText("名單: \n" + item);
+        return "名單: \n" + item;
     }
 }

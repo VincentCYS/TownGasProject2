@@ -80,7 +80,7 @@ public class StartWorkActivity extends AppCompatActivity {
 
         // Show the actionbar
         createActionBar();
-        
+
         //instantiate custom adapter
         adapter = new StartWorkListViewAdapter(this);
 
