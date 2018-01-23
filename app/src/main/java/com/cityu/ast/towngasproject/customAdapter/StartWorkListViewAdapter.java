@@ -58,8 +58,6 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.start_work_list_item, null);
-        } else {
-
         }
 
         final TextView listText = (TextView) view.findViewById(R.id.list);
@@ -93,7 +91,7 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
                 }
         );
 
-        final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), listText, position);
+        final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), listText);
 
         btnStaffInfo.setOnClickListener(new View.OnClickListener(){
             @Override

@@ -108,7 +108,6 @@ public class HomeActivity extends AppCompatActivity {
                         tvTime.setText(DateFormat.getTimeInstance().format(location.getTime()));
                         tvDate.setText(DateFormat.getDateInstance().format(location.getTime()));
                         pDialog.dismiss();
-
                     } catch (Exception e) {
                     }
                 }
@@ -136,13 +135,13 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showChangeLangDialog();
                 configure_button();
-                if (tvLocation.getText() == "") {
+               // if (tvLocation.getText() == "") {
                     pDialog = new ProgressDialog(HomeActivity.this);
                     pDialog.setMessage("載入中...");
                     pDialog.setIndeterminate(false);
                     pDialog.setCancelable(true);
                     pDialog.show();
-                }
+              //  }
             }
 
         });
@@ -155,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
                 pDialog.setMessage("載入中...");
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(true);
-              //  pDialog.show();
+                pDialog.show();
             }
 
         });
@@ -218,8 +217,6 @@ public class HomeActivity extends AppCompatActivity {
                         locationManager.requestSingleUpdate(criteria, listener, null);
                     }
                 }
-
-
             }
         });
 

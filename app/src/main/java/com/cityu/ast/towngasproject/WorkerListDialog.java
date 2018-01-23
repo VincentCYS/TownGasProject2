@@ -49,7 +49,7 @@ public class WorkerListDialog extends Dialog{
     public static String staffList = "";
 
 
-    public WorkerListDialog(final Context context,final TextView list, final int position) {
+    public WorkerListDialog(final Context context,final TextView list) {
         super(context);
         /** Design the dialog in main.xml file */
         //final Dialog dialog = new Dialog(context);
@@ -93,8 +93,8 @@ public class WorkerListDialog extends Dialog{
 
         confirm.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                nameList.add(getShowItem());
-                list.setText(nameList.get(position));
+                //nameList.add(getShowItem());
+                list.setText(getShowItem());
 
                 StartWorkListViewAdapter.backup.clear();
                 for(int i = 0;i<selectedItem.size();i++){
@@ -152,6 +152,6 @@ public class WorkerListDialog extends Dialog{
                 item = item + "\n";
             }
         }
-        return "名單: \n" + item;
+        return "\n" + item;
     }
 }
