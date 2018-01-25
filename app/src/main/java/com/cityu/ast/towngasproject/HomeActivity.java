@@ -31,8 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.cityu.ast.towngasproject.Postgre.DbContract;
+import com.cityu.ast.towngasproject.Postgre.PostgresHelper;
+
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -244,8 +248,4 @@ public class HomeActivity extends AppCompatActivity {
 
         b.show();
     }
-
-
-
-
 }

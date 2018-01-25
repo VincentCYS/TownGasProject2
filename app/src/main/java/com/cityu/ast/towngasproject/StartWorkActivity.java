@@ -87,10 +87,6 @@ public class StartWorkActivity extends AppCompatActivity {
         //handle listview and assign adapter
         listView.setAdapter(adapter);
 
-        // Start the android camera app
-
-
-
         Button btnDeleteAll = (Button) actionBarView.findViewById(R.id.btnDeleteAll);
         btnDeleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,13 +121,6 @@ public class StartWorkActivity extends AppCompatActivity {
         });
 
         Button btnStart = (Button) findViewById(R.id.btnStart);
-//        btnStart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showFinalStaffListDialog();
-//            }
-//        });
-
 
         try {
             mKeyStore = KeyStore.getInstance("AndroidKeyStore");

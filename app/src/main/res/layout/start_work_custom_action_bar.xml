@@ -8,11 +8,11 @@
     <Button
         android:id="@+id/btnDeleteAll"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary"
+        android:layout_marginStart="226dp"
+        android:layout_toEndOf="@+id/textView"
+        android:background="@drawable/buttonshapedarkblue"
         android:text="@string/btnDeleteAll"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/normalFontSize" />
@@ -21,28 +21,14 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="67dp"
-        android:layout_marginStart="67dp"
-        android:layout_margin="@dimen/margin"
-        android:textSize="@dimen/normalFontSize"
-        android:textStyle="bold"
-        android:textColor="@color/white"
+        android:layout_alignBaseline="@+id/btnDeleteAll"
+        android:layout_alignBottom="@+id/btnDeleteAll"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/margin"
         android:background="@color/colorPrimary"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView"
-        android:text="@string/btnStart" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_toEndOf="@+id/imageTakePhoto"
-        android:layout_toRightOf="@+id/imageTakePhoto"
-        android:layout_alignBottom="@id/imageTakePhoto"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        app:srcCompat="@drawable/towngas_icon" />
+        android:text="@string/btnStart"
+        android:textColor="@color/white"
+        android:textSize="@dimen/normalFontSize"
+        android:textStyle="bold" />
 
 </RelativeLayout>

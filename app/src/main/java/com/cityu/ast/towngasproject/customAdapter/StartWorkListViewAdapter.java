@@ -13,12 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cityu.ast.towngasproject.R;
+import com.cityu.ast.towngasproject.StartWorkActivity;
 import com.cityu.ast.towngasproject.WorkerListDialog;
 
 import java.util.ArrayList;
@@ -50,10 +52,8 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View view = convertView;
-
-
 
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -65,7 +65,6 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
         final Button btnStaffInfo = (Button) view.findViewById(R.id.btnStartStaffInfo);
         final Button btnDelete = (Button) view.findViewById(R.id.btnStartDelete);
         final ImageView bigPic = (ImageView) parent.getRootView().findViewById(R.id.expanded_image);
-
 
         // Display the image that taken by the camera
         imageView.setImageBitmap(list.get(position));
@@ -93,6 +92,7 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
 
         final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), listText);
 
+
         btnStaffInfo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -116,6 +116,8 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
                                 // Remove the record from the list
                                 list.remove(position);
                                 notifyDataSetChanged();     // Refresh the listview
+
+                                ((StartWorkActivity) context).finish();
                                 dialog.cancel();
                             }
                         });
