@@ -30,10 +30,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.cityu.ast.towngasproject.Postgre.DbContract;
-import com.cityu.ast.towngasproject.Postgre.PostgresHelper;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
