@@ -1,20 +1,26 @@
 package com.cityu.ast.towngasproject;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +45,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import static android.content.Context.*;
 import static com.cityu.ast.towngasproject.CameraActivity.imageBitmap;
 import static com.cityu.ast.towngasproject.WorkerListDialog.staffList;
 import static com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapter.list;
@@ -97,24 +104,23 @@ public class StartWorkActivity extends AppCompatActivity {
 
                         // Positive button event
                         .setPositiveButton(
-                        "確定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                list.removeAll(list);
-                                adapter.notifyDataSetChanged();
-                                finish();
-                                dialog.cancel();
-                            }
+                                "確定",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        list.removeAll(list);
+                                        adapter.notifyDataSetChanged();
+                                        finish();
+                                        dialog.cancel();
+                                    }
 
-                            // Negative button event
-                        }).setNegativeButton(
+                                    // Negative button event
+                                }).setNegativeButton(
                         "取消",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         }).create().show();
-
 
 
             }
@@ -146,7 +152,7 @@ public class StartWorkActivity extends AppCompatActivity {
         KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
         FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
 
- //       Button purchaseButton = (Button) findViewById(R.id.purchase_button);
+        //       Button purchaseButton = (Button) findViewById(R.id.purchase_button);
 
         if (!keyguardManager.isKeyguardSecure()) {
             // Show a message that the user hasn't set up a fingerprint or lock screen.
@@ -157,7 +163,6 @@ public class StartWorkActivity extends AppCompatActivity {
             btnStart.setEnabled(false);
             return;
         }
-
 
 
         // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
@@ -180,7 +185,7 @@ public class StartWorkActivity extends AppCompatActivity {
 
     }
 
-    public void btnStartEvent () {
+    public void btnStartEvent() {
         list.removeAll(list);
         adapter.notifyDataSetChanged();
         finish();
@@ -240,7 +245,7 @@ public class StartWorkActivity extends AppCompatActivity {
     }
 
 
-    public void createActionBar(){
+    public void createActionBar() {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.start_work_custom_action_bar);
         // Disable the back button on the actionbar
@@ -286,7 +291,7 @@ public class StartWorkActivity extends AppCompatActivity {
         showFinalStaffListDialog();
 
         Toast.makeText(this, "ggop", Toast.LENGTH_SHORT);
-       // showConfirmation(true,withFingerprint);
+        // showConfirmation(true,withFingerprint);
     }
 
     public void createKey(String keyName, boolean invalidatedByBiometricEnrollment) {
@@ -325,7 +330,7 @@ public class StartWorkActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       // getMenuInflater().inflate(R.menu.menu_main, menu);
+        // getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -365,5 +370,20 @@ public class StartWorkActivity extends AppCompatActivity {
                 fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
         }
+    }
+
+
+    public String getDeviceIMEI() {
+        String deviceUniqueIdentifier = null;
+        TelephonyManager tm = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        if (null != tm) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                deviceUniqueIdentifier = tm.getDeviceId();
+            }
+        }
+        if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
+            deviceUniqueIdentifier = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+        return deviceUniqueIdentifier;
     }
 }

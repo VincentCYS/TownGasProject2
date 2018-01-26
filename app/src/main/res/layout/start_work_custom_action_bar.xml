@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="226dp"
         android:layout_toEndOf="@+id/textView"
-        android:background="@drawable/buttonshapedarkblue"
+        android:background="@drawable/buttonshapegrey"
         android:text="@string/btnDeleteAll"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/normalFontSize" />

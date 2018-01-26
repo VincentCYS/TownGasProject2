@@ -60,7 +60,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/margin"
                 android:layout_marginLeft="5dp"
-                android:background="@drawable/buttonshapedarkblue"
+                android:background="@drawable/buttonshapegrey"
                 android:text="@string/btnDelete"
                 android:textColor="@color/white"
                 android:textSize="@dimen/normalFontSize"
