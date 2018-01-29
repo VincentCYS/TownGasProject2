@@ -67,8 +67,10 @@ public class Record {
 
     private String longitude;
     private String latitude;
-    private String description;
     private String datetime;
     private String IMEI;
+
+    // private
+    private String description;
     private ImageView photo;
 }

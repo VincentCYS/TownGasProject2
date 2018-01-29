@@ -180,9 +180,8 @@ public class StartWorkActivity extends AppCompatActivity {
         createKey(DEFAULT_KEY_NAME, true);
         createKey(KEY_NAME_NOT_INVALIDATED, false);
         btnStart.setEnabled(true);
-        btnStart.setOnClickListener(
-                new StartWorkActivity.PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
 
+        btnStart.setOnClickListener(new StartWorkActivity.PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
     }
 
     public void btnStartEvent() {
@@ -215,8 +214,6 @@ public class StartWorkActivity extends AppCompatActivity {
 
 
     public void showFinalStaffListDialog() {
-        if (staffList != null) {
-
             new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
                     .setTitle("名單")
                     .setMessage(staffList)
@@ -228,6 +225,7 @@ public class StartWorkActivity extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
+                                  //  Toast.makeText(actionBarView.getContext(), getDeviceIMEI(), Toast.LENGTH_SHORT).show();
                                     showProcessSuccessDialog();
                                 }
 
@@ -239,9 +237,6 @@ public class StartWorkActivity extends AppCompatActivity {
                             dialog.cancel();
                         }
                     }).create().show();
-        } else {
-            Toast.makeText(actionBarView.getContext(), "empty", Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -335,6 +330,23 @@ public class StartWorkActivity extends AppCompatActivity {
     }
 
 
+    private void emptyStaffList() {
+        new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
+                .setTitle("沒有員工在名單")
+                .setMessage("請在按\"輸入員工資料\"加入員工")
+                .setCancelable(true)
+                // Positive button event
+                .setPositiveButton(
+                        "確定",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+
+                            // Negative button event
+                        }).create().show();
+    }
+
     private class PurchaseButtonClickListener implements View.OnClickListener {
 
         Cipher mCipher;
@@ -348,27 +360,33 @@ public class StartWorkActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            // Set up the crypto object for later. The object will be authenticated by use
-            // of the fingerprint.
-            if (initCipher(mCipher, mKeyName)) {
 
-                // Show the fingerprint dialog. The user has the option to use the fingerprint with
-                // crypto, or you can fall back to using a server-side verified password.
-                FingerprintAuthenticationDialogFragment fragment
-                        = new FingerprintAuthenticationDialogFragment();
-                fragment.setCryptoObject(new FingerprintManager.CryptoObject(mCipher));
-                boolean useFingerprintPreference = mSharedPreferences
-                        .getBoolean(getString(R.string.use_fingerprint_to_authenticate_key),
-                                true);
-                if (useFingerprintPreference) {
-                    fragment.setStage(
-                            FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
-                } else {
-                    fragment.setStage(
-                            FingerprintAuthenticationDialogFragment.Stage.PASSWORD);
+            if (staffList.equals("")) {
+                emptyStaffList();
+            } else {
+                // Set up the crypto object for later. The object will be authenticated by use
+                // of the fingerprint.
+                if (initCipher(mCipher, mKeyName)) {
+
+                    // Show the fingerprint dialog. The user has the option to use the fingerprint with
+                    // crypto, or you can fall back to using a server-side verified password.
+                    FingerprintAuthenticationDialogFragment fragment
+                            = new FingerprintAuthenticationDialogFragment();
+                    fragment.setCryptoObject(new FingerprintManager.CryptoObject(mCipher));
+                    boolean useFingerprintPreference = mSharedPreferences
+                            .getBoolean(getString(R.string.use_fingerprint_to_authenticate_key),
+                                    true);
+                    if (useFingerprintPreference) {
+                        fragment.setStage(
+                                FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
+                    } else {
+                        fragment.setStage(
+                                FingerprintAuthenticationDialogFragment.Stage.PASSWORD);
+                    }
+                    fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
                 }
-                fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
+
         }
     }
 

@@ -134,13 +134,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showChangeLangDialog();
+                pDialog = new ProgressDialog(HomeActivity.this);
+                pDialog.setMessage("載入中...");
+                pDialog.setIndeterminate(false);
+                pDialog.setCancelable(true);
+                pDialog.show();
                 configure_button();
                // if (tvLocation.getText() == "") {
-                    pDialog = new ProgressDialog(HomeActivity.this);
-                    pDialog.setMessage("載入中...");
-                    pDialog.setIndeterminate(false);
-                    pDialog.setCancelable(true);
-                    pDialog.show();
+
               //  }
             }
 
@@ -149,12 +150,13 @@ public class HomeActivity extends AppCompatActivity {
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                configure_button();
                 pDialog = new ProgressDialog(HomeActivity.this);
                 pDialog.setMessage("載入中...");
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(true);
                 pDialog.show();
+                configure_button();
+
             }
 
         });
@@ -166,6 +168,10 @@ public class HomeActivity extends AppCompatActivity {
                 if (tvLocation.getText() != "") {
                    // Toast.makeText(dialogView.getContext(), "等待信號...", Toast.LENGTH_LONG).show();
                     b.dismiss();
+                    tvLocation.setText("");
+                    tvTime.setText("");
+                    tvDate.setText("");
+                    tvGpsSignal.setText("");
                     Intent intent = new Intent(HomeActivity.this, StartWorkActivity.class);
                     startActivity(intent);
                 }
@@ -194,7 +200,7 @@ public class HomeActivity extends AppCompatActivity {
             public void run() {
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET, Manifest.permission.READ_PHONE_STATE}
                                 , 10);
                     }
                 }
@@ -204,9 +210,36 @@ public class HomeActivity extends AppCompatActivity {
                 boolean statusOfNetwork = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
                 if (!statusOfGPS && !statusOfNetwork ) {
-                    Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(i);
+                    new AlertDialog.Builder(HomeActivity.this, R.style.Theme_AppCompat_DayNight_Dialog_Alert)
+                            .setTitle("請開啟定位服務(GPS)\n")
+                            .setMessage("請於設定=>位置=>開啟定位服務(GPS)")
+                            .setCancelable(true)
+                            // Positive button event
+                            .setPositiveButton(
+                                    "確定",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                            startActivity(i);
+                                            dialog.cancel();
+                                            pDialog = new ProgressDialog(HomeActivity.this);
+                                            pDialog.setMessage("載入中...");
+                                            pDialog.setIndeterminate(false);
+                                            pDialog.setCancelable(true);
+                                            pDialog.show();
+                                        }
+
+                                        // Negative button event
+                                    }).setNegativeButton(
+                            "取消",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    // b.dismiss();
+                                }
+                            }).create().show();
                 }
+
 
                 if (statusOfGPS) {
                     locationManager.requestLocationUpdates("gps", 1000*20, 0, listener);
@@ -244,4 +277,6 @@ public class HomeActivity extends AppCompatActivity {
 
         b.show();
     }
+
+    
 }
