@@ -6,36 +6,27 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
+import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -89,9 +80,24 @@ public class HomeActivity extends AppCompatActivity {
                 latitude = location.getLatitude();
 
 
-                tvGpsSignal.setText("好");
+                // o < x < 10 good
+                // 10 <= x <= 25 ok
+                // x > 25 bad
+                String gpsStatus = "沒有信號";
+                int gpsAccuracy = (int) location.getAccuracy();
 
-                configure_button();
+                if (gpsAccuracy > 0 && gpsAccuracy < 25) {
+                    gpsStatus = "好";
+                } else if (gpsAccuracy >= 25 && gpsAccuracy <= 50) {
+                    gpsStatus = "普通";
+                } else if (gpsAccuracy > 50){
+                    gpsStatus = "差";
+                }
+
+                tvGpsSignal.setText(gpsStatus + " " + location.getAccuracy());
+                pDialog.dismiss();
+
+               // configure_button();
 
                 if (latitude != null || longitude != null) {
                     geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -111,7 +117,6 @@ public class HomeActivity extends AppCompatActivity {
                     } catch (Exception e) {
                     }
                 }
-
 
             }
 
@@ -134,15 +139,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showChangeLangDialog();
-                pDialog = new ProgressDialog(HomeActivity.this);
-                pDialog.setMessage("載入中...");
-                pDialog.setIndeterminate(false);
-                pDialog.setCancelable(true);
-                pDialog.show();
                 configure_button();
-               // if (tvLocation.getText() == "") {
-
-              //  }
             }
 
         });
@@ -150,13 +147,12 @@ public class HomeActivity extends AppCompatActivity {
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pDialog = new ProgressDialog(HomeActivity.this);
-                pDialog.setMessage("載入中...");
-                pDialog.setIndeterminate(false);
-                pDialog.setCancelable(true);
-                pDialog.show();
-                configure_button();
+                tvLocation.setText("");
+                tvTime.setText("");
+                tvDate.setText("");
+                tvGpsSignal.setText("");
 
+                configure_button();
             }
 
         });
@@ -213,7 +209,7 @@ public class HomeActivity extends AppCompatActivity {
                     new AlertDialog.Builder(HomeActivity.this, R.style.Theme_AppCompat_DayNight_Dialog_Alert)
                             .setTitle("請開啟定位服務(GPS)\n")
                             .setMessage("請於設定=>位置=>開啟定位服務(GPS)")
-                            .setCancelable(true)
+                            .setCancelable(false)
                             // Positive button event
                             .setPositiveButton(
                                     "確定",
@@ -222,11 +218,6 @@ public class HomeActivity extends AppCompatActivity {
                                             Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                                             startActivity(i);
                                             dialog.cancel();
-                                            pDialog = new ProgressDialog(HomeActivity.this);
-                                            pDialog.setMessage("載入中...");
-                                            pDialog.setIndeterminate(false);
-                                            pDialog.setCancelable(true);
-                                            pDialog.show();
                                         }
 
                                         // Negative button event
@@ -235,21 +226,37 @@ public class HomeActivity extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
-                                    // b.dismiss();
+//                                    pDialog.cancel();
                                 }
                             }).create().show();
-                }
+                } else {
+                    pDialog = new ProgressDialog(HomeActivity.this);
+                    pDialog.setMessage("載入中...");
+                    pDialog.setIndeterminate(false);
+                    pDialog.setCancelable(true);  // set to false
+                    pDialog.show();
+//                    new CountDownTimer(20000, 1000) {
+//
+//                        public void onTick(long millisUntilFinished) {
+//                        }
+//
+//                        public void onFinish() {
+//                            pDialog.dismiss();
+//                        }
+//                    }.start();
+                    if (statusOfGPS) {
+                        locationManager.requestLocationUpdates("gps", 1000*20, 0, listener);
+                        // locationManager.requestSingleUpdate("gps",listener, null);
 
-
-                if (statusOfGPS) {
-                    locationManager.requestLocationUpdates("gps", 1000*20, 0, listener);
-                   // locationManager.requestSingleUpdate("gps",listener, null);
-
-                } else if (statusOfNetwork) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-                        locationManager.requestSingleUpdate(criteria, listener, null);
+                    } else if (statusOfNetwork) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+                            locationManager.requestSingleUpdate(criteria, listener, null);
+                        }
                     }
                 }
+
+
+
             }
         });
 

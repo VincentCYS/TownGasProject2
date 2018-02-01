@@ -46,9 +46,6 @@ public class WorkerListDialog extends Dialog{
             "56175 au 叛文"
     };
 
-    public static String staffList = "";
-
-
     public WorkerListDialog(final Context context, final TextView list) {
         super(context);
         /** Design the dialog in main.xml file */
@@ -93,7 +90,6 @@ public class WorkerListDialog extends Dialog{
 
         confirm.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                //nameList.add(getShowItem());
                 list.setText(getShowItem());
 
 
@@ -148,7 +144,6 @@ public class WorkerListDialog extends Dialog{
         String item = "";
         for(int i = 0; i< selectedItem.size(); i++){
             item = item + listItem[selectedItem.get(i)];
-            staffList += "\n" + listItem[selectedItem.get(i)];
             if(i != selectedItem.size()-1){
                 item = item + "\n";
             }

@@ -1,6 +1,7 @@
 package com.cityu.ast.towngasproject;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.KeyguardManager;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,9 +47,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-import static android.content.Context.*;
-import static com.cityu.ast.towngasproject.CameraActivity.imageBitmap;
-import static com.cityu.ast.towngasproject.WorkerListDialog.staffList;
 import static com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapter.list;
 
 
@@ -65,12 +64,13 @@ public class StartWorkActivity extends AppCompatActivity {
     private KeyStore mKeyStore;
     private KeyGenerator mKeyGenerator;
     private SharedPreferences mSharedPreferences;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_work);
-        ListView listView = (ListView) findViewById(R.id.startWorkListView);
+        listView = (ListView) findViewById(R.id.startWorkListView);
 
         Button btnTakePhoto = (Button) findViewById(R.id.btnStartTakePhoto);
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
@@ -152,8 +152,6 @@ public class StartWorkActivity extends AppCompatActivity {
         KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
         FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
 
-        //       Button purchaseButton = (Button) findViewById(R.id.purchase_button);
-
         if (!keyguardManager.isKeyguardSecure()) {
             // Show a message that the user hasn't set up a fingerprint or lock screen.
             Toast.makeText(this,
@@ -163,7 +161,6 @@ public class StartWorkActivity extends AppCompatActivity {
             btnStart.setEnabled(false);
             return;
         }
-
 
         // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
         // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
@@ -214,29 +211,29 @@ public class StartWorkActivity extends AppCompatActivity {
 
 
     public void showFinalStaffListDialog() {
-            new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
-                    .setTitle("名單")
-                    .setMessage(staffList)
-                    .setCancelable(true)
+        new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
+                .setTitle("名單")
+                .setMessage(getStaffList())
+                .setCancelable(true)
 
-                    // Positive button event
-                    .setPositiveButton(
-                            "確定",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                  //  Toast.makeText(actionBarView.getContext(), getDeviceIMEI(), Toast.LENGTH_SHORT).show();
-                                    showProcessSuccessDialog();
-                                }
+                // Positive button event
+                .setPositiveButton(
+                        "確定",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Toast.makeText(actionBarView.getContext(), getDeviceIMEI().toString(), Toast.LENGTH_SHORT).show();
+                                showProcessSuccessDialog();
+                            }
 
-                                // Negative button event
-                            }).setNegativeButton(
-                    "取消",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    }).create().show();
+                            // Negative button event
+                        }).setNegativeButton(
+                "取消",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).create().show();
     }
 
 
@@ -254,32 +251,12 @@ public class StartWorkActivity extends AppCompatActivity {
             SecretKey key = (SecretKey) mKeyStore.getKey(keyName, null);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return true;
-        } catch (KeyPermanentlyInvalidatedException e) {
-            return false;
-        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException
-                | NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new RuntimeException("Failed to init Cipher", e);
+        } catch (IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | KeyStoreException | InvalidKeyException e) {
+            throw new RuntimeException("初始化 cipher 失败", e);
         }
+
     }
 
-//    private void showConfirmation(boolean auth,boolean withFingerprint) {
-//       // findViewById(R.id.confirmation_message).setVisibility(View.VISIBLE);
-//        if (auth) {
-//            TextView v = (TextView) findViewById(R.id.encrypted_message);
-//            v.setVisibility(View.VISIBLE);
-//            if(withFingerprint)
-//                v.setText(R.string.fingerprint_success);
-//            else
-//                v.setText(R.string.password_success);
-//        }
-//    }
-
-    /**
-     * Proceed the purchase operation
-     *
-     * @param withFingerprint {@code true} if the purchase was made by using a fingerprint
-     * @param cryptoObject the Crypto object
-     */
     public void onPurchased(boolean withFingerprint,
                             @Nullable FingerprintManager.CryptoObject cryptoObject) {
         assert cryptoObject != null;
@@ -360,8 +337,8 @@ public class StartWorkActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-
-            if (staffList.equals("")) {
+            Toast.makeText(StartWorkActivity.this, getStaffList(), Toast.LENGTH_LONG).show();
+            if (getStaffList() == "") {
                 emptyStaffList();
             } else {
                 // Set up the crypto object for later. The object will be authenticated by use
@@ -393,15 +370,34 @@ public class StartWorkActivity extends AppCompatActivity {
 
     public String getDeviceIMEI() {
         String deviceUniqueIdentifier = null;
-        TelephonyManager tm = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
-        if (null != tm) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                deviceUniqueIdentifier = tm.getDeviceId();
-            }
+        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        @SuppressLint("MissingPermission") String imei = telephonyManager.getDeviceId();
+        return imei;
+    }
+
+    public String getStaffList() {
+        View parentView = null;
+        String staffList = "";
+
+        for (int i = 0; i < list.size(); i++) {
+            parentView = getViewByPosition(i, listView);
+            TextView staff = ((TextView) parentView.findViewById(R.id.list));
+            staffList += "\n" + staff.getText();
         }
-        if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
-            deviceUniqueIdentifier = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return staffList;
+    }
+
+
+    public View getViewByPosition(int pos, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition
+                + listView.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition) {
+            return listView.getAdapter().getView(pos, null, listView);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return listView.getChildAt(childIndex);
         }
-        return deviceUniqueIdentifier;
     }
 }

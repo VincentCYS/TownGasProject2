@@ -32,6 +32,7 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
     public static ArrayList<String> nameList = new ArrayList<>();
     private Context context;
 
+
     public StartWorkListViewAdapter(Context context) {
         this.context = context;
     }

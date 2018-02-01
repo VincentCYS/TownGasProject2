@@ -22,14 +22,14 @@
         android:roundIcon="@drawable/towngas_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeActivity">
+        <activity android:name=".StartWorkActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StartWorkActivity" />
+        <activity android:name=".HomeActivity" />
         <activity android:name=".CameraActivity" />
         <activity android:name=".StopWorkActivity"></activity>
     </application>
