@@ -1,31 +1,23 @@
 package com.cityu.ast.towngasproject;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.KeyguardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,12 +107,8 @@ public class StartWorkActivity extends AppCompatActivity {
 
                                     // Negative button event
                                 }).setNegativeButton(
-                        "取消",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        }).create().show();
+                        "取消", null).create().show();
+
 
 
             }
@@ -152,6 +140,8 @@ public class StartWorkActivity extends AppCompatActivity {
         KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
         FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
 
+        //       Button purchaseButton = (Button) findViewById(R.id.purchase_button);
+
         if (!keyguardManager.isKeyguardSecure()) {
             // Show a message that the user hasn't set up a fingerprint or lock screen.
             Toast.makeText(this,
@@ -161,6 +151,8 @@ public class StartWorkActivity extends AppCompatActivity {
             btnStart.setEnabled(false);
             return;
         }
+
+
 
         // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
         // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
@@ -177,11 +169,12 @@ public class StartWorkActivity extends AppCompatActivity {
         createKey(DEFAULT_KEY_NAME, true);
         createKey(KEY_NAME_NOT_INVALIDATED, false);
         btnStart.setEnabled(true);
+        btnStart.setOnClickListener(
+                new StartWorkActivity.StartWorkButtonListener(defaultCipher, DEFAULT_KEY_NAME));
 
-        btnStart.setOnClickListener(new StartWorkActivity.PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
     }
 
-    public void btnStartEvent() {
+    public void btnStartEvent () {
         list.removeAll(list);
         adapter.notifyDataSetChanged();
         finish();
@@ -211,33 +204,35 @@ public class StartWorkActivity extends AppCompatActivity {
 
 
     public void showFinalStaffListDialog() {
-        new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
-                .setTitle("名單")
-                .setMessage(getStaffList())
-                .setCancelable(true)
+            if (getStaffList() != "\n") {
+                new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
+                        .setTitle("名單")
+                        .setMessage(getStaffList())
+                        .setCancelable(true)
 
-                // Positive button event
-                .setPositiveButton(
-                        "確定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                Toast.makeText(actionBarView.getContext(), getDeviceIMEI().toString(), Toast.LENGTH_SHORT).show();
-                                showProcessSuccessDialog();
-                            }
+                        // Positive button event
+                        .setPositiveButton(
+                                "確定",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                        showProcessSuccessDialog();
+                                    }
 
-                            // Negative button event
-                        }).setNegativeButton(
-                "取消",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).create().show();
+                                    // Negative button event
+                                }).setNegativeButton(
+                        "取消", null).create().show();
+            } else{
+                new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
+                        .setTitle("沒有名單")
+                        .setCancelable(true)
+                        // Positive button event
+                        .setPositiveButton(
+                                "確定", null).create().show();
+            }
     }
 
-
-    public void createActionBar() {
+    public void createActionBar(){
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.start_work_custom_action_bar);
         // Disable the back button on the actionbar
@@ -251,10 +246,12 @@ public class StartWorkActivity extends AppCompatActivity {
             SecretKey key = (SecretKey) mKeyStore.getKey(keyName, null);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return true;
-        } catch (IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException | KeyStoreException | InvalidKeyException e) {
-            throw new RuntimeException("初始化 cipher 失败", e);
+        } catch (KeyPermanentlyInvalidatedException e) {
+            return false;
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException
+                | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Failed to init Cipher", e);
         }
-
     }
 
     public void onPurchased(boolean withFingerprint,
@@ -307,29 +304,12 @@ public class StartWorkActivity extends AppCompatActivity {
     }
 
 
-    private void emptyStaffList() {
-        new AlertDialog.Builder(actionBarView.getContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert)
-                .setTitle("沒有員工在名單")
-                .setMessage("請在按\"輸入員工資料\"加入員工")
-                .setCancelable(true)
-                // Positive button event
-                .setPositiveButton(
-                        "確定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-
-                            // Negative button event
-                        }).create().show();
-    }
-
-    private class PurchaseButtonClickListener implements View.OnClickListener {
+    private class StartWorkButtonListener implements View.OnClickListener {
 
         Cipher mCipher;
         String mKeyName;
 
-        PurchaseButtonClickListener(Cipher cipher, String keyName) {
+        StartWorkButtonListener(Cipher cipher, String keyName) {
             mCipher = cipher;
             mKeyName = keyName;
         }
@@ -337,12 +317,8 @@ public class StartWorkActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            Toast.makeText(StartWorkActivity.this, getStaffList(), Toast.LENGTH_LONG).show();
-            if (getStaffList() == "") {
-                emptyStaffList();
-            } else {
-                // Set up the crypto object for later. The object will be authenticated by use
-                // of the fingerprint.
+            // Set up the crypto object for later. The object will be authenticated by use
+            // of the fingerprint.
                 if (initCipher(mCipher, mKeyName)) {
 
                     // Show the fingerprint dialog. The user has the option to use the fingerprint with
@@ -362,31 +338,21 @@ public class StartWorkActivity extends AppCompatActivity {
                     }
                     fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
                 }
+
+        }
+    }
+
+    private String getStaffList() {
+        String display = "";
+            View parentView = null;
+            for (int i = 0; i < list.size(); i++) {
+                parentView = getViewByPosition(i, listView);
+
+                TextView staff = ((TextView) parentView.findViewById(R.id.names));
+                display += "\n" + staff.getText();
             }
-
-        }
+        return display;
     }
-
-
-    public String getDeviceIMEI() {
-        String deviceUniqueIdentifier = null;
-        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        @SuppressLint("MissingPermission") String imei = telephonyManager.getDeviceId();
-        return imei;
-    }
-
-    public String getStaffList() {
-        View parentView = null;
-        String staffList = "";
-
-        for (int i = 0; i < list.size(); i++) {
-            parentView = getViewByPosition(i, listView);
-            TextView staff = ((TextView) parentView.findViewById(R.id.list));
-            staffList += "\n" + staff.getText();
-        }
-        return staffList;
-    }
-
 
     public View getViewByPosition(int pos, ListView listView) {
         final int firstListItemPosition = listView.getFirstVisiblePosition();

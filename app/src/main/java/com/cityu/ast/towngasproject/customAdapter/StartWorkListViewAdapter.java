@@ -7,8 +7,11 @@ package com.cityu.ast.towngasproject.customAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,6 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cityu.ast.towngasproject.HomeActivity;
 import com.cityu.ast.towngasproject.R;
 import com.cityu.ast.towngasproject.StartWorkActivity;
 import com.cityu.ast.towngasproject.WorkerListDialog;
@@ -31,7 +35,6 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
     public static ArrayList<Integer> backup = new ArrayList<>();
     public static ArrayList<String> nameList = new ArrayList<>();
     private Context context;
-
 
     public StartWorkListViewAdapter(Context context) {
         this.context = context;
@@ -61,7 +64,7 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
             view = inflater.inflate(R.layout.start_work_list_item, null);
         }
 
-        final TextView listText = (TextView) view.findViewById(R.id.list);
+        final TextView listText = (TextView) view.findViewById(R.id.names);
         final ImageView imageView = (ImageView) view.findViewById(R.id.startPhoto);
         final Button btnStaffInfo = (Button) view.findViewById(R.id.btnStartStaffInfo);
         final Button btnDelete = (Button) view.findViewById(R.id.btnStartDelete);
@@ -69,7 +72,6 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
 
         // Display the image that taken by the camera
         imageView.setImageBitmap(list.get(position));
-
 
         imageView.setOnLongClickListener(
                 new View.OnLongClickListener() {
@@ -82,14 +84,28 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
                 }
         );
 
-        imageView.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        bigPic.setVisibility(View.GONE);
-                    }
+//        imageView.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        bigPic.setVisibility(View.GONE);
+//                    }
+//                }
+//        );
+//
+
+
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    bigPic.setVisibility(View.GONE);
                 }
-        );
+                return false;
+            }
+        });
+
+
 
         final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), listText);
 
@@ -100,7 +116,6 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
                 workerListDialog.show();
             }
         });
-
 
         // Delete a single add_staff_dialog_list_view of record
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -124,12 +139,7 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
                         });
 
                 builder1.setNegativeButton(
-                        "取消",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                        "取消", null);
 
                 android.app.AlertDialog alert11 = builder1.create();
                 alert11.show();

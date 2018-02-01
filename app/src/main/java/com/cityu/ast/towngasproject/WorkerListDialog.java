@@ -46,18 +46,21 @@ public class WorkerListDialog extends Dialog{
             "56175 au 叛文"
     };
 
+   // public static String [] staffList = new String[listItem.length];
+
+
     public WorkerListDialog(final Context context, final TextView list) {
         super(context);
         /** Design the dialog in main.xml file */
         //final Dialog dialog = new Dialog(context);
         setContentView(R.layout.dialog_worker_select);
-       // list = (TextView) view.findViewById(R.id.list);
+        // list = (TextView) view.findViewById(R.id.list);
         clearAll = (Button) findViewById(R.id.clear_all);
         confirm = (Button) findViewById(R.id.confirm);
         cancel = (Button) findViewById(R.id.cancel);
-        et = (EditText) findViewById(R.id.et1);
+        et = (EditText) findViewById(R.id.searchBox);
         et.addTextChangedListener(filterTextWatcher);
-        lv = (ListView) findViewById(R.id.lv1);
+        lv = (ListView) findViewById(R.id.nameList);
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         adapter = new ArrayAdapter<String>(context, R.layout.add_staff_dialog_list_view, R.id.workerItem, listItem);
@@ -90,6 +93,7 @@ public class WorkerListDialog extends Dialog{
 
         confirm.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
+                //nameList.add(getShowItem());
                 list.setText(getShowItem());
 
 
@@ -144,6 +148,7 @@ public class WorkerListDialog extends Dialog{
         String item = "";
         for(int i = 0; i< selectedItem.size(); i++){
             item = item + listItem[selectedItem.get(i)];
+           // staffList[i] += "\n" + listItem[selectedItem.get(i)];
             if(i != selectedItem.size()-1){
                 item = item + "\n";
             }

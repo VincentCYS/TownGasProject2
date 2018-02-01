@@ -46,6 +46,7 @@ public class HomeActivity extends AppCompatActivity {
     Button btnRefresh, btnOk;
     Criteria criteria;
     ProgressDialog pDialog;
+    String gpsStatus = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +81,22 @@ public class HomeActivity extends AppCompatActivity {
                 latitude = location.getLatitude();
 
 
-                // o < x < 10 good
-                // 10 <= x <= 25 ok
-                // x > 25 bad
-                String gpsStatus = "沒有信號";
+                // o < x < 25 good
+                // 25 <= x <= 50 ok
+                // x > 50 bad
                 int gpsAccuracy = (int) location.getAccuracy();
 
-                if (gpsAccuracy > 0 && gpsAccuracy < 25) {
-                    gpsStatus = "好";
-                } else if (gpsAccuracy >= 25 && gpsAccuracy <= 50) {
-                    gpsStatus = "普通";
-                } else if (gpsAccuracy > 50){
-                    gpsStatus = "差";
+                if(gpsAccuracy > 0 ) {
+                    if (gpsAccuracy < 25) {
+                        gpsStatus = "好";
+                    } else if (gpsAccuracy <= 50) {
+                        gpsStatus = "普通";
+                    } else {
+                        gpsStatus = "差";
+                    }
                 }
 
-                tvGpsSignal.setText(gpsStatus + " " + location.getAccuracy());
+                tvGpsSignal.setText(gpsStatus + " ");
                 pDialog.dismiss();
 
                // configure_button();
@@ -235,15 +237,17 @@ public class HomeActivity extends AppCompatActivity {
                     pDialog.setIndeterminate(false);
                     pDialog.setCancelable(true);  // set to false
                     pDialog.show();
-//                    new CountDownTimer(20000, 1000) {
-//
-//                        public void onTick(long millisUntilFinished) {
-//                        }
-//
-//                        public void onFinish() {
-//                            pDialog.dismiss();
-//                        }
-//                    }.start();
+                    new CountDownTimer(20000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                        }
+
+                        public void onFinish() {
+                            pDialog.dismiss();
+                            tvGpsSignal.setText("沒有信號");
+                        }
+                    }.start();
+
                     if (statusOfGPS) {
                         locationManager.requestLocationUpdates("gps", 1000*20, 0, listener);
                         // locationManager.requestSingleUpdate("gps",listener, null);
@@ -285,5 +289,5 @@ public class HomeActivity extends AppCompatActivity {
         b.show();
     }
 
-    
+
 }
