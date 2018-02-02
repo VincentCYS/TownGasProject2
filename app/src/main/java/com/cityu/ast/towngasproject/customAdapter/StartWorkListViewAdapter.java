@@ -35,6 +35,7 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
     public static ArrayList<Integer> backup = new ArrayList<>();
     public static ArrayList<String> nameList = new ArrayList<>();
     private Context context;
+    public static ImageView bigPic;
 
     public StartWorkListViewAdapter(Context context) {
         this.context = context;
@@ -68,21 +69,21 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
         final ImageView imageView = (ImageView) view.findViewById(R.id.startPhoto);
         final Button btnStaffInfo = (Button) view.findViewById(R.id.btnStartStaffInfo);
         final Button btnDelete = (Button) view.findViewById(R.id.btnStartDelete);
-        final ImageView bigPic = (ImageView) parent.getRootView().findViewById(R.id.expanded_image);
+        bigPic = (ImageView) parent.getRootView().findViewById(R.id.expanded_image);
 
         // Display the image that taken by the camera
         imageView.setImageBitmap(list.get(position));
 
-        imageView.setOnLongClickListener(
-                new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        bigPic.setImageBitmap(list.get(position));
-                        bigPic.setVisibility(View.VISIBLE);
-                        return false;
-                    }
-                }
-        );
+//        imageView.setOnLongClickListener(
+//                new View.OnLongClickListener() {
+//                    @Override
+//                    public boolean onLongClick(View view) {
+//                        bigPic.setImageBitmap(list.get(position));
+//                        bigPic.setVisibility(View.VISIBLE);
+//                        return false;
+//                    }
+//                }
+//        );
 
 //        imageView.setOnClickListener(
 //                new View.OnClickListener() {
@@ -98,13 +99,16 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
         imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    bigPic.setVisibility(View.GONE);
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    bigPic.setImageBitmap(list.get(position));
+                    bigPic.setVisibility(View.VISIBLE);
+                    return true;
+
                 }
                 return false;
+
             }
         });
-
 
 
         final WorkerListDialog workerListDialog = new WorkerListDialog(view.getContext(), listText);
@@ -148,4 +152,5 @@ public class StartWorkListViewAdapter extends BaseAdapter implements ListAdapter
 
         return view;
     }
+
 }
