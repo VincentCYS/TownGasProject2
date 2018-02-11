@@ -59,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         dialogView = inflater.inflate(R.layout.custom_dialog_gps, null, false);
 
         getSupportActionBar().hide();
+        getWindow().setAllowEnterTransitionOverlap(true);
 
         btnStartHome = (Button) findViewById(R.id.btnStartHome);
         btnEnd = (Button) findViewById(R.id.btnEnd);

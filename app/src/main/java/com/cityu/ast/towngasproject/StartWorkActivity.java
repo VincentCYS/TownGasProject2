@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -39,6 +40,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import static com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapter.bigPic;
 import static com.cityu.ast.towngasproject.customAdapter.StartWorkListViewAdapter.list;
 
 
@@ -172,6 +174,17 @@ public class StartWorkActivity extends AppCompatActivity {
         btnStart.setOnClickListener(
                 new StartWorkActivity.StartWorkButtonListener(defaultCipher, DEFAULT_KEY_NAME));
 
+
+
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    bigPic.setVisibility(View.GONE);
+                }
+                return false;
+            }
+        });
     }
 
     public void btnStartEvent () {
@@ -366,4 +379,5 @@ public class StartWorkActivity extends AppCompatActivity {
             return listView.getChildAt(childIndex);
         }
     }
+
 }
