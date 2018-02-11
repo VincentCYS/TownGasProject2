@@ -237,6 +237,7 @@ public class HomeActivity extends AppCompatActivity {
                     pDialog.setIndeterminate(false);
                     pDialog.setCancelable(true);  // set to false
                     pDialog.show();
+
                     new CountDownTimer(20000, 1000) {
 
                         public void onTick(long millisUntilFinished) {
